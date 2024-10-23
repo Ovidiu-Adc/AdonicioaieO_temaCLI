@@ -81,26 +81,35 @@ namespace TriangleColorApp
             base.OnRenderFrame(e);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            // Setare matrice
-            Matrix4 modelView = Matrix4.LookAt(Vector3.UnitZ * 5, Vector3.Zero, Vector3.UnitY); // Camera plasata pe axa Z,spre origine
+            Matrix4 modelView = Matrix4.LookAt(Vector3.UnitZ * 5, Vector3.Zero, Vector3.UnitY);
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(ref modelView);
 
             GL.Rotate(angle, 0.0f, 1.0f, 0.0f);
 
-            // Setare culoare triunghi
-            GL.Color4(colors[0], colors[1], colors[2], colors[3]);
-
-            // Desenare triunghi
+            // Desenare triunghi cu culori diferite pentru fiecare vertex
             GL.Begin(PrimitiveType.Triangles);
-            foreach (var vertex in vertices)
+
+            for (int i = 0; i < vertices.Length; i++)
             {
-                GL.Vertex3(vertex);
+                // Modificare culoare pentru fiecare vertex
+                float r = colors[0] - 0.2f * i; // variaza rosul
+                float g = colors[1] + 0.2f * i; // variaza verdele
+                float b = colors[2] - 0.1f * i; // variaza albastrul
+                GL.Color3(r, g, b);
+
+                // Afisare valori RGB in consola
+                Console.WriteLine($"Vertex {i + 1}: RGB({r}, {g}, {b})");
+
+                // Desenare vertex
+                GL.Vertex3(vertices[i]);
             }
+
             GL.End();
 
             SwapBuffers();
         }
+
 
         static void Main(string[] args)
         {
